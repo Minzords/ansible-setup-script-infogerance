@@ -1,0 +1,40 @@
+---
+- hosts: deb
+  become: yes
+  tasks:
+  - name: Update
+    apt:
+      upgrade: full
+      update_cache: yes
+      cache_valid_time: 86400
+
+  - name: Install tools & editors
+    apt:
+      name:
+      - htop
+      - neofetch
+      - dnsutils
+      - nano
+      - emacs
+      state: latest
+      cache_valid_time: 3600
+
+- hosts: rhel
+  become: yes
+  tasks:
+  - name: Update
+    dnf:
+      name: "*"
+      state: latest
+      
+  - name: Install tools & editors
+    dnf:
+       name: '{{ item }}'
+       state: present
+       update_cache: True
+       with_items:
+         htop
+         neofetch
+         bind-utils
+         nano
+         emacs
